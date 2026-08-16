@@ -7,23 +7,35 @@ type BingoSheetProps = {
   title: string;
   orientation: PageOrientation;
   showHeader: boolean;
+  paperImage: string | null;
 };
 
 function pad(value: number): string {
   return String(value).padStart(2, "0");
 }
 
-export function BingoSheet({ cards, index, title, orientation, showHeader }: BingoSheetProps) {
+export function BingoSheet({
+  cards,
+  index,
+  title,
+  orientation,
+  showHeader,
+  paperImage,
+}: BingoSheetProps) {
   const sheetClass = [
     "sheet",
     `sheet-${orientation}`,
     showHeader ? "" : "sheet-no-header",
+    paperImage ? "sheet-has-image" : "",
   ]
     .filter(Boolean)
     .join(" ");
 
   return (
-    <section className={sheetClass}>
+    <section
+      className={sheetClass}
+      style={paperImage ? { backgroundImage: `url(${paperImage})` } : undefined}
+    >
       {showHeader ? (
         <header className="sheet-head">
           <div className="sheet-title">{title}</div>

@@ -11,6 +11,7 @@ const DEFAULT_COLORS: CardColors = {
   text: "#3b2416",
   stripe: "#c9a27a",
   empty: "#f3eadc",
+  paper: "#fffdf8",
 };
 
 function clampSheetCount(value: number): number {
@@ -24,6 +25,7 @@ export function App() {
   const [orientation, setOrientation] = useState<PageOrientation>("portrait");
   const [showHeader, setShowHeader] = useState(true);
   const [colors, setColors] = useState<CardColors>(DEFAULT_COLORS);
+  const [paperImage, setPaperImage] = useState<string | null>(null);
   const [sheets, setSheets] = useState<Sheet[]>([]);
 
   useEffect(() => {
@@ -61,6 +63,8 @@ export function App() {
         onOrientationChange={setOrientation}
         onShowHeaderChange={setShowHeader}
         onColorsChange={setColors}
+        paperImage={paperImage}
+        onPaperImageChange={setPaperImage}
         onGenerate={handleGenerate}
         onPrint={() => window.print()}
       />
@@ -82,6 +86,7 @@ export function App() {
               "--card-text": colors.text,
               "--card-stripe": colors.stripe,
               "--card-empty": colors.empty,
+              "--paper-bg": colors.paper,
             } as CSSProperties
           }
         >
@@ -93,6 +98,7 @@ export function App() {
               title={title.trim() || DEFAULT_TITLE}
               orientation={orientation}
               showHeader={showHeader}
+              paperImage={paperImage}
             />
           ))}
         </main>

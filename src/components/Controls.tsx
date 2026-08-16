@@ -1,4 +1,4 @@
-import type { FormEvent } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import type { CardColors, PageOrientation } from "../bingo/types";
 
 type ControlsProps = {
@@ -13,6 +13,8 @@ type ControlsProps = {
   onOrientationChange: (value: PageOrientation) => void;
   onShowHeaderChange: (value: boolean) => void;
   onColorsChange: (colors: CardColors) => void;
+  paperImage: string | null;
+  onPaperImageChange: (image: string | null) => void;
   onGenerate: () => void;
   onPrint: () => void;
 };
@@ -29,12 +31,30 @@ export function Controls({
   onOrientationChange,
   onShowHeaderChange,
   onColorsChange,
+  paperImage,
+  onPaperImageChange,
   onGenerate,
   onPrint,
 }: ControlsProps) {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     onGenerate();
+  }
+
+  function handlePaperImage(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file || !file.type.startsWith("image/")) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        onPaperImageChange(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
   }
 
   return (
@@ -115,6 +135,32 @@ export function Controls({
             value={colors.empty}
             onChange={(event) => onColorsChange({ ...colors, empty: event.target.value })}
           />
+        </label>
+        <label className="color-field">
+          Papel
+          <input
+            type="color"
+            value={colors.paper}
+            onChange={(event) => onColorsChange({ ...colors, paper: event.target.value })}
+          />
+        </label>
+        <label className="file-field">
+          Imagem do papel
+          <span className="file-actions">
+            <span className="file-button">
+              {paperImage ? "Trocar imagem" : "Escolher imagem"}
+              <input type="file" accept="image/*" onChange={handlePaperImage} />
+            </span>
+            {paperImage ? (
+              <button
+                className="secondary"
+                type="button"
+                onClick={() => onPaperImageChange(null)}
+              >
+                Remover
+              </button>
+            ) : null}
+          </span>
         </label>
         <div className="actions">
           <button className="primary" type="submit">

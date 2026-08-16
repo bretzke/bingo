@@ -130,6 +130,38 @@ select {
   cursor: pointer;
 }
 
+.file-field {
+  min-width: 180px;
+}
+
+.file-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.file-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.file-button input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
 .actions {
   display: flex;
   gap: 8px;
@@ -174,7 +206,10 @@ button:disabled {
   min-height: 297mm;
   margin: 0 auto;
   padding: 9mm 8mm 8mm;
-  background: var(--card);
+  background-color: var(--paper-bg, var(--card));
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   box-shadow: 0 18px 40px var(--shadow);
   border: 1px solid #e7d3b8;
 }
@@ -372,6 +407,7 @@ button:disabled {
     height: 195mm;
   }
 
+  .sheet,
   .card,
   .cell {
     -webkit-print-color-adjust: exact;

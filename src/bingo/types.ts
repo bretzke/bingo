@@ -8,4 +8,5 @@ export type CardColors = {
   text: string;
   stripe: string;
   empty: string;
+  paper: string;
 };
