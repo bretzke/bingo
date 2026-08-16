@@ -4,13 +4,14 @@ import {
   COLS,
   COLUMN_RANGES,
   COLUMN_SIZES,
+  MAX_CONSECUTIVE_IN_ROW,
   MAX_PER_COLUMN,
   NUMBERS_PER_CARD,
   NUMBERS_PER_ROW,
   ROWS,
 } from "./constants";
 import { generateSheet, generateSheets } from "./generator";
-import { cardNumbers, validateSheet } from "./validate";
+import { cardNumbers, maxConsecutiveFilled, validateSheet } from "./validate";
 import type { Card, Sheet } from "./types";
 
 function filledInColumn(card: Card, col: number): number[] {
@@ -78,6 +79,17 @@ describe("bingo sheet generator", () => {
         const values = filledInColumn(card, col);
         expect(values.every((value) => value >= start && value <= end)).toBe(true);
         expect(values).toEqual([...values].sort((a, b) => a - b));
+      }
+    }
+  });
+
+  it("never places more than two filled cells side by side in a row", () => {
+    const sheets = generateSheets(80);
+    for (const sheet of sheets) {
+      for (const card of sheet) {
+        for (const row of card) {
+          expect(maxConsecutiveFilled(row)).toBeLessThanOrEqual(MAX_CONSECUTIVE_IN_ROW);
+        }
       }
     }
   });

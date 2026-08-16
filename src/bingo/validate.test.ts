@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { generateSheet } from "./generator";
 import type { Card, Sheet } from "./types";
-import { cardNumbers, validateSheet } from "./validate";
+import { cardNumbers, maxConsecutiveFilled, validateSheet } from "./validate";
 
 function cloneSheet(sheet: Sheet): Sheet {
   return sheet.map((card) => card.map((row) => [...row]));
@@ -10,6 +10,26 @@ function cloneSheet(sheet: Sheet): Sheet {
 describe("sheet validation", () => {
   it("accepts a generated sheet", () => {
     expect(() => validateSheet(generateSheet())).not.toThrow();
+  });
+
+  it("measures consecutive filled cells in a row", () => {
+    expect(maxConsecutiveFilled([1, 2, 3, 4, 5, null, null, null, null])).toBe(5);
+    expect(maxConsecutiveFilled([1, 2, null, 3, 4, null, 5, null, null])).toBe(2);
+    expect(maxConsecutiveFilled([1, null, 2, null, 3, null, 4, null, 5])).toBe(1);
+  });
+
+  it("rejects a row with more than two numbers side by side", () => {
+    const sheet = cloneSheet(generateSheet());
+    const row = sheet[0]?.[0];
+    if (!row) {
+      throw new Error("Missing row");
+    }
+    const values = row.filter((value): value is number => value !== null);
+    row.fill(null);
+    values.forEach((value, index) => {
+      row[index] = value;
+    });
+    expect(() => validateSheet(sheet)).toThrow("A row cannot have more than 2 numbers in a row");
   });
 
   it("extracts only filled numbers from a card", () => {

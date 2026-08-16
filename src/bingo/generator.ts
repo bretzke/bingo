@@ -3,6 +3,7 @@ import {
   COLS,
   COLUMN_RANGES,
   COLUMN_SIZES,
+  MAX_CONSECUTIVE_IN_ROW,
   MAX_PER_COLUMN,
   NUMBERS_PER_CARD,
   NUMBERS_PER_ROW,
@@ -100,6 +101,25 @@ function buildOccupancy(): number[][] {
   return occupancy;
 }
 
+function consecutiveRunIfPlaced(maskRow: boolean[], col: number): number {
+  let run = 1;
+  for (let index = col - 1; index >= 0 && maskRow[index]; index -= 1) {
+    run += 1;
+  }
+  for (let index = col + 1; index < COLS && maskRow[index]; index += 1) {
+    run += 1;
+  }
+  return run;
+}
+
+function canPlaceInRow(mask: boolean[][], row: number, col: number): boolean {
+  const maskRow = mask[row];
+  if (!maskRow || maskRow[col]) {
+    return false;
+  }
+  return consecutiveRunIfPlaced(maskRow, col) <= MAX_CONSECUTIVE_IN_ROW;
+}
+
 function placeRowMask(counts: number[]): boolean[][] {
   const mask = Array.from({ length: ROWS }, () => Array<boolean>(COLS).fill(false));
   const rowFill = [0, 0, 0];
@@ -112,6 +132,9 @@ function placeRowMask(counts: number[]): boolean[][] {
     if (count === 2) twos.push(col);
     if (count === 1) ones.push(col);
   });
+
+  shuffle(twos);
+  shuffle(ones);
 
   for (const col of threes) {
     for (let row = 0; row < ROWS; row += 1) {
@@ -144,7 +167,7 @@ function placeRowMask(counts: number[]): boolean[][] {
     for (const row of rows) {
       if ((rowFill[row] ?? 0) >= NUMBERS_PER_ROW) continue;
       const maskRow = mask[row];
-      if (!maskRow) continue;
+      if (!maskRow || !canPlaceInRow(mask, row, col)) continue;
       maskRow[col] = true;
       rowFill[row] = (rowFill[row] ?? 0) + 1;
       if (solveOnes(index + 1)) return true;
@@ -167,6 +190,9 @@ function placeRowMask(counts: number[]): boolean[][] {
     const pairs = shuffle(twoPairs.map((pair) => [...pair] as [number, number]));
     for (const [a, b] of pairs) {
       if ((rowFill[a] ?? 0) >= NUMBERS_PER_ROW || (rowFill[b] ?? 0) >= NUMBERS_PER_ROW) {
+        continue;
+      }
+      if (!canPlaceInRow(mask, a, col) || !canPlaceInRow(mask, b, col)) {
         continue;
       }
       const firstRow = mask[a];
@@ -220,7 +246,7 @@ function fillCard(counts: number[], columnValues: number[][]): Card {
   return cells;
 }
 
-export function generateSheet(maxAttempts = 200): Sheet {
+export function generateSheet(maxAttempts = 400): Sheet {
   let lastError: unknown = null;
 
   for (let attempt = 0; attempt < maxAttempts; attempt += 1) {

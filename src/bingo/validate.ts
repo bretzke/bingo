@@ -2,6 +2,7 @@ import {
   CARDS_PER_SHEET,
   COLS,
   COLUMN_RANGES,
+  MAX_CONSECUTIVE_IN_ROW,
   MAX_PER_COLUMN,
   NUMBERS_PER_CARD,
   NUMBERS_PER_ROW,
@@ -12,6 +13,20 @@ import type { Card, Sheet } from "./types";
 
 export function cardNumbers(cells: Card): number[] {
   return cells.flat().filter((value): value is number => value !== null);
+}
+
+export function maxConsecutiveFilled(row: Array<number | null>): number {
+  let longest = 0;
+  let run = 0;
+  for (const cell of row) {
+    if (cell !== null) {
+      run += 1;
+      if (run > longest) longest = run;
+    } else {
+      run = 0;
+    }
+  }
+  return longest;
 }
 
 export function validateSheet(cards: Sheet): void {
@@ -37,6 +52,9 @@ export function validateSheet(cards: Sheet): void {
     for (const row of cells) {
       if (row.filter((value) => value !== null).length !== NUMBERS_PER_ROW) {
         throw new Error("Each row must have exactly 5 numbers");
+      }
+      if (maxConsecutiveFilled(row) > MAX_CONSECUTIVE_IN_ROW) {
+        throw new Error("A row cannot have more than 2 numbers in a row");
       }
     }
 
