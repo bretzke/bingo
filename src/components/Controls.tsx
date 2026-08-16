@@ -65,10 +65,11 @@ export function Controls({
   return (
     <section className="controls">
       <div className="brand">
-        <h1>Bingo do Artesanato</h1>
+        <h1>Bingo</h1>
         <p>
-          Cada folha A4 tem 6 cartelas e todos os números de 1 a 90, sem repetição.
-          A distribuição entre as cartelas é mais aleatória a cada geração.
+          Cada folha A4 tem 6 cartelas e todos os números de 1 a 90, sem
+          repetição. A distribuição entre as cartelas é mais aleatória a cada
+          geração.
         </p>
       </div>
       <form className="form" onSubmit={handleSubmit}>
@@ -95,7 +96,9 @@ export function Controls({
           Folha A4
           <select
             value={orientation}
-            onChange={(event) => onOrientationChange(event.target.value as PageOrientation)}
+            onChange={(event) =>
+              onOrientationChange(event.target.value as PageOrientation)
+            }
           >
             <option value="portrait">Vertical</option>
             <option value="landscape">Horizontal</option>
@@ -114,7 +117,9 @@ export function Controls({
           <input
             type="color"
             value={colors.border}
-            onChange={(event) => onColorsChange({ ...colors, border: event.target.value })}
+            onChange={(event) =>
+              onColorsChange({ ...colors, border: event.target.value })
+            }
           />
         </label>
         <label className="color-field">
@@ -122,7 +127,9 @@ export function Controls({
           <input
             type="color"
             value={colors.text}
-            onChange={(event) => onColorsChange({ ...colors, text: event.target.value })}
+            onChange={(event) =>
+              onColorsChange({ ...colors, text: event.target.value })
+            }
           />
         </label>
         <label className="color-field">
@@ -130,7 +137,9 @@ export function Controls({
           <input
             type="color"
             value={colors.stripe}
-            onChange={(event) => onColorsChange({ ...colors, stripe: event.target.value })}
+            onChange={(event) =>
+              onColorsChange({ ...colors, stripe: event.target.value })
+            }
           />
         </label>
         <label className="color-field">
@@ -138,7 +147,9 @@ export function Controls({
           <input
             type="color"
             value={colors.empty}
-            onChange={(event) => onColorsChange({ ...colors, empty: event.target.value })}
+            onChange={(event) =>
+              onColorsChange({ ...colors, empty: event.target.value })
+            }
           />
         </label>
         <label className="color-field">
@@ -146,7 +157,9 @@ export function Controls({
           <input
             type="color"
             value={colors.paper}
-            onChange={(event) => onColorsChange({ ...colors, paper: event.target.value })}
+            onChange={(event) =>
+              onColorsChange({ ...colors, paper: event.target.value })
+            }
           />
         </label>
         <label className="file-field">
@@ -171,7 +184,12 @@ export function Controls({
           <button className="primary" type="submit">
             Gerar cartelas
           </button>
-          <button className="secondary" type="button" disabled={!hasSheets} onClick={onPrint}>
+          <button
+            className="secondary"
+            type="button"
+            disabled={!hasSheets}
+            onClick={onPrint}
+          >
             Imprimir A4
           </button>
         </div>
@@ -179,3 +197,4 @@ export function Controls({
     </section>
   );
 }
+

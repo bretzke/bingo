@@ -4,6 +4,7 @@ import { validateSheet } from "./bingo/validate";
 import type { CardColors, PageOrientation, Sheet } from "./bingo/types";
 import { BingoSheet } from "./components/BingoSheet";
 import { Controls } from "./components/Controls";
+import { Footer } from "./components/Footer";
 
 const DEFAULT_TITLE = "Bingo do Artesanato";
 const DEFAULT_COLORS: CardColors = {
@@ -117,6 +118,7 @@ export function App() {
           ))}
         </main>
       )}
+      <Footer />
     </>
   );
 }
