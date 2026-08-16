@@ -18,3 +18,4 @@ export const NUMBERS_PER_ROW = 5;
 export const NUMBERS_PER_CARD = 15;
 export const MAX_PER_COLUMN = 2;
 export const MAX_CONSECUTIVE_IN_ROW = 2;
+export const MAX_SHEETS = 500;

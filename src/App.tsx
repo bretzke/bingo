@@ -1,6 +1,7 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { generateSheets } from "./bingo/generator";
 import { validateSheet } from "./bingo/validate";
+import { MAX_SHEETS } from "./bingo/constants";
 import type { CardColors, PageOrientation, Sheet } from "./bingo/types";
 import { BingoSheet } from "./components/BingoSheet";
 import { Controls } from "./components/Controls";
@@ -17,7 +18,7 @@ const DEFAULT_COLORS: CardColors = {
 
 function clampSheetCount(value: number): number {
   if (!Number.isFinite(value)) return 1;
-  return Math.min(50, Math.max(1, Math.trunc(value)));
+  return Math.min(MAX_SHEETS, Math.max(1, Math.trunc(value)));
 }
 
 export function App() {

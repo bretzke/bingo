@@ -13,7 +13,7 @@ Cada cartela segue o bingo clássico de 90:
 - no máximo **2 números** na mesma coluna
 - colunas por dezena: 1–9, 10–19, …, 80–90
 
-Na mesma folha, os 90 números aparecem **uma vez só**. A cada geração, o algoritmo redistribui ao acaso quais números vão para qual cartela e em qual linha, sem usar um gabarito fixo.
+Na mesma folha, os 90 números aparecem **uma vez só**. Cada geração produz uma distribuição nova, respeitando as regras acima.
 
 ## Personalização
 

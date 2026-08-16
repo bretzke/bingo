@@ -1,4 +1,5 @@
 import type { ChangeEvent, FormEvent } from "react";
+import { MAX_SHEETS } from "../bingo/constants";
 import { preparePaperImage } from "../bingo/preparePaperImage";
 import type { CardColors, PageOrientation } from "../bingo/types";
 
@@ -68,8 +69,8 @@ export function Controls({
         <h1>Bingo</h1>
         <p>
           Cada folha A4 tem 6 cartelas e todos os números de 1 a 90, sem
-          repetição. A distribuição entre as cartelas é mais aleatória a cada
-          geração.
+          repetição. Cada geração produz uma distribuição nova, respeitando as
+          regras do bingo.
         </p>
       </div>
       <form className="form" onSubmit={handleSubmit}>
@@ -87,7 +88,7 @@ export function Controls({
           <input
             type="number"
             min={1}
-            max={50}
+            max={MAX_SHEETS}
             value={sheetCount}
             onChange={(event) => onSheetCountChange(Number(event.target.value))}
           />
