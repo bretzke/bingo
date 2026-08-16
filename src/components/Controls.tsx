@@ -1,4 +1,5 @@
 import type { ChangeEvent, FormEvent } from "react";
+import { preparePaperImage } from "../bingo/preparePaperImage";
 import type { CardColors, PageOrientation } from "../bingo/types";
 
 type ControlsProps = {
@@ -41,20 +42,24 @@ export function Controls({
     onGenerate();
   }
 
-  function handlePaperImage(event: ChangeEvent<HTMLInputElement>) {
+  async function handlePaperImage(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     event.target.value = "";
     if (!file || !file.type.startsWith("image/")) {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === "string") {
-        onPaperImageChange(reader.result);
-      }
-    };
-    reader.readAsDataURL(file);
+    try {
+      onPaperImageChange(await preparePaperImage(file));
+    } catch {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          onPaperImageChange(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   return (

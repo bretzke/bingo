@@ -32,10 +32,10 @@ export function BingoSheet({
     .join(" ");
 
   return (
-    <section
-      className={sheetClass}
-      style={paperImage ? { backgroundImage: `url(${paperImage})` } : undefined}
-    >
+    <section className={sheetClass}>
+      {paperImage ? (
+        <img className="sheet-paper-image" src={paperImage} alt="" />
+      ) : null}
       {showHeader ? (
         <header className="sheet-head">
           <div className="sheet-title">{title}</div>

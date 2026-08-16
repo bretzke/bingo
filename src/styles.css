@@ -202,16 +202,31 @@ button:disabled {
 
 .sheet,
 .sheet-portrait {
+  position: relative;
   width: 210mm;
   min-height: 297mm;
   margin: 0 auto;
   padding: 9mm 8mm 8mm;
+  overflow: hidden;
   background-color: var(--paper-bg, var(--card));
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
   box-shadow: 0 18px 40px var(--shadow);
   border: 1px solid #e7d3b8;
+}
+
+.sheet-paper-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.sheet-head,
+.card-grid {
+  position: relative;
+  z-index: 1;
 }
 
 .sheet-landscape {
@@ -347,9 +362,17 @@ button:disabled {
     margin: 0;
   }
 
+  html,
   body,
   #root {
-    background: #fff;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    background: #fff !important;
+    background-image: none !important;
   }
 
   .controls,
@@ -358,6 +381,7 @@ button:disabled {
   }
 
   .sheets {
+    display: block;
     gap: 0;
     padding: 0;
     overflow: visible;
@@ -370,6 +394,9 @@ button:disabled {
     padding: 8mm 8mm 7mm;
     border: 0;
     box-shadow: none;
+    overflow: hidden;
+    break-inside: avoid;
+    page-break-inside: avoid;
     break-after: page;
     page-break-after: always;
   }
@@ -383,6 +410,7 @@ button:disabled {
     width: 210mm;
     height: 297mm;
     min-height: 297mm;
+    max-height: 297mm;
   }
 
   .sheet-portrait .card-grid {
@@ -397,6 +425,7 @@ button:disabled {
     width: 297mm;
     height: 210mm;
     min-height: 210mm;
+    max-height: 210mm;
   }
 
   .sheet-landscape .card-grid {
@@ -407,7 +436,12 @@ button:disabled {
     height: 195mm;
   }
 
+  .card {
+    box-shadow: none;
+  }
+
   .sheet,
+  .sheet-paper-image,
   .card,
   .cell {
     -webkit-print-color-adjust: exact;

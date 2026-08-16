@@ -41,6 +41,20 @@ export function App() {
     };
   }, [orientation]);
 
+  async function handlePrint() {
+    const images = Array.from(document.querySelectorAll<HTMLImageElement>(".sheet-paper-image"));
+    await Promise.all(
+      images.map((image) => {
+        if (image.complete) return Promise.resolve();
+        return new Promise<void>((resolve) => {
+          image.addEventListener("load", () => resolve(), { once: true });
+          image.addEventListener("error", () => resolve(), { once: true });
+        });
+      }),
+    );
+    window.print();
+  }
+
   function handleGenerate() {
     const count = clampSheetCount(sheetCount);
     setSheetCount(count);
@@ -66,7 +80,7 @@ export function App() {
         paperImage={paperImage}
         onPaperImageChange={setPaperImage}
         onGenerate={handleGenerate}
-        onPrint={() => window.print()}
+        onPrint={handlePrint}
       />
 
       {sheets.length === 0 ? (
