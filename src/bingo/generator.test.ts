@@ -8,6 +8,18 @@ describe("bingo sheet generator", () => {
     expect(() => validateSheet(sheet)).not.toThrow();
   });
 
+  it("never fills all three rows in the same column", () => {
+    const sheets = generateSheets(80);
+    for (const sheet of sheets) {
+      for (const card of sheet) {
+        for (let col = 0; col < 9; col += 1) {
+          const filled = card.filter((row) => row[col] !== null).length;
+          expect(filled).toBeLessThan(3);
+        }
+      }
+    }
+  });
+
   it("generates many valid random sheets", () => {
     const sheets = generateSheets(200);
     expect(sheets).toHaveLength(200);

@@ -2,6 +2,7 @@ import {
   CARDS_PER_SHEET,
   COLS,
   COLUMN_RANGES,
+  MAX_PER_COLUMN,
   NUMBERS_PER_CARD,
   NUMBERS_PER_ROW,
   ROWS,
@@ -48,6 +49,10 @@ export function validateSheet(cards: Sheet): void {
       const values = cells
         .map((row) => row[col])
         .filter((value): value is number => value !== null);
+
+      if (values.length > MAX_PER_COLUMN) {
+        throw new Error(`Column ${col} cannot fill all 3 rows`);
+      }
 
       if (values.some((value) => value < start || value > end)) {
         throw new Error(`Column ${col} has a number outside its range`);

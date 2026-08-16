@@ -220,7 +220,7 @@ function fillCard(counts: number[], columnValues: number[][]): Card {
   return cells;
 }
 
-export function generateSheet(maxAttempts = 80): Sheet {
+export function generateSheet(maxAttempts = 200): Sheet {
   let lastError: unknown = null;
 
   for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
