@@ -1,11 +1,18 @@
 import type { FormEvent } from "react";
+import type { CardColors, PageOrientation } from "../bingo/types";
 
 type ControlsProps = {
   title: string;
   sheetCount: number;
+  orientation: PageOrientation;
+  showHeader: boolean;
+  colors: CardColors;
   hasSheets: boolean;
   onTitleChange: (value: string) => void;
   onSheetCountChange: (value: number) => void;
+  onOrientationChange: (value: PageOrientation) => void;
+  onShowHeaderChange: (value: boolean) => void;
+  onColorsChange: (colors: CardColors) => void;
   onGenerate: () => void;
   onPrint: () => void;
 };
@@ -13,9 +20,15 @@ type ControlsProps = {
 export function Controls({
   title,
   sheetCount,
+  orientation,
+  showHeader,
+  colors,
   hasSheets,
   onTitleChange,
   onSheetCountChange,
+  onOrientationChange,
+  onShowHeaderChange,
+  onColorsChange,
   onGenerate,
   onPrint,
 }: ControlsProps) {
@@ -51,6 +64,56 @@ export function Controls({
             max={50}
             value={sheetCount}
             onChange={(event) => onSheetCountChange(Number(event.target.value))}
+          />
+        </label>
+        <label>
+          Folha A4
+          <select
+            value={orientation}
+            onChange={(event) => onOrientationChange(event.target.value as PageOrientation)}
+          >
+            <option value="portrait">Vertical</option>
+            <option value="landscape">Horizontal</option>
+          </select>
+        </label>
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            checked={showHeader}
+            onChange={(event) => onShowHeaderChange(event.target.checked)}
+          />
+          Cabeçalho da folha
+        </label>
+        <label className="color-field">
+          Borda
+          <input
+            type="color"
+            value={colors.border}
+            onChange={(event) => onColorsChange({ ...colors, border: event.target.value })}
+          />
+        </label>
+        <label className="color-field">
+          Texto
+          <input
+            type="color"
+            value={colors.text}
+            onChange={(event) => onColorsChange({ ...colors, text: event.target.value })}
+          />
+        </label>
+        <label className="color-field">
+          Listrado
+          <input
+            type="color"
+            value={colors.stripe}
+            onChange={(event) => onColorsChange({ ...colors, stripe: event.target.value })}
+          />
+        </label>
+        <label className="color-field">
+          Fundo vazio
+          <input
+            type="color"
+            value={colors.empty}
+            onChange={(event) => onColorsChange({ ...colors, empty: event.target.value })}
           />
         </label>
         <div className="actions">
