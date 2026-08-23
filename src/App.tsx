@@ -1,7 +1,9 @@
-import { useEffect, useState, type CSSProperties } from "react";
-import { generateSheets } from "./bingo/generator";
-import { validateSheet } from "./bingo/validate";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { MAX_SHEETS } from "./bingo/constants";
+import { createStripePattern } from "./bingo/createStripePattern";
+import { generateSheets } from "./bingo/generator";
+import { printSheets } from "./bingo/printSheets";
+import { validateSheet } from "./bingo/validate";
 import type { CardColors, PageOrientation, Sheet } from "./bingo/types";
 import { BingoSheet } from "./components/BingoSheet";
 import { Controls } from "./components/Controls";
@@ -29,6 +31,10 @@ export function App() {
   const [colors, setColors] = useState<CardColors>(DEFAULT_COLORS);
   const [paperImage, setPaperImage] = useState<string | null>(null);
   const [sheets, setSheets] = useState<Sheet[]>([]);
+  const stripePattern = useMemo(
+    () => createStripePattern(colors.stripe, colors.empty),
+    [colors.stripe, colors.empty],
+  );
 
   useEffect(() => {
     const styleId = "print-page-orientation";
@@ -44,17 +50,18 @@ export function App() {
   }, [orientation]);
 
   async function handlePrint() {
-    const images = Array.from(document.querySelectorAll<HTMLImageElement>(".sheet-paper-image"));
-    await Promise.all(
-      images.map((image) => {
-        if (image.complete) return Promise.resolve();
-        return new Promise<void>((resolve) => {
-          image.addEventListener("load", () => resolve(), { once: true });
-          image.addEventListener("error", () => resolve(), { once: true });
-        });
-      }),
-    );
-    window.print();
+    const sheetsNode = document.querySelector<HTMLElement>(".sheets");
+    if (!sheetsNode) return;
+    await printSheets(sheetsNode);
+  }
+
+  function handlePaperImageChange(image: string | null) {
+    setPaperImage((current) => {
+      if (current?.startsWith("blob:")) {
+        URL.revokeObjectURL(current);
+      }
+      return image;
+    });
   }
 
   function handleGenerate() {
@@ -80,7 +87,7 @@ export function App() {
         onShowHeaderChange={setShowHeader}
         onColorsChange={setColors}
         paperImage={paperImage}
-        onPaperImageChange={setPaperImage}
+        onPaperImageChange={handlePaperImageChange}
         onGenerate={handleGenerate}
         onPrint={handlePrint}
       />
@@ -102,6 +109,7 @@ export function App() {
               "--card-text": colors.text,
               "--card-stripe": colors.stripe,
               "--card-empty": colors.empty,
+              "--card-stripe-pattern": stripePattern ? `url("${stripePattern}")` : "none",
               "--paper-bg": colors.paper,
             } as CSSProperties
           }

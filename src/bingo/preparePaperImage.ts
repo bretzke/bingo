@@ -19,5 +19,12 @@ export async function preparePaperImage(file: File): Promise<string> {
 
   context.drawImage(bitmap, 0, 0, width, height);
   bitmap.close();
-  return canvas.toDataURL("image/jpeg", JPEG_QUALITY);
+
+  const blob = await new Promise<Blob | null>((resolve) => {
+    canvas.toBlob(resolve, "image/jpeg", JPEG_QUALITY);
+  });
+  if (!blob) {
+    return canvas.toDataURL("image/jpeg", JPEG_QUALITY);
+  }
+  return URL.createObjectURL(blob);
 }
