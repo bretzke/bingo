@@ -336,9 +336,13 @@ button:disabled {
 
 .cell.empty {
   background-color: var(--card-empty, var(--empty));
-  background-image: var(--card-stripe-pattern, none);
-  background-repeat: repeat;
-  background-size: 8px 8px;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 3px,
+    var(--card-stripe, var(--line)) 3px,
+    var(--card-stripe, var(--line)) 4px
+  );
 }
 
 .empty-state {
@@ -377,13 +381,6 @@ button:disabled {
     margin: 0;
   }
 
-  script,
-  style,
-  noscript,
-  link {
-    display: none !important;
-  }
-
   html,
   body,
   #root {
@@ -394,11 +391,13 @@ button:disabled {
     padding: 0;
     overflow: visible;
     background: #fff !important;
-    background-image: none !important;
   }
 
+  body.is-printing .controls,
   .controls,
+  body.is-printing .empty-state,
   .empty-state,
+  body.is-printing .site-footer,
   .site-footer {
     display: none !important;
   }
@@ -465,9 +464,8 @@ button:disabled {
   }
 
   .cell.empty {
-    background-image: var(--card-stripe-pattern, none);
-    background-repeat: repeat;
-    background-size: 8px 8px;
+    background-image: none !important;
+    background-color: var(--card-empty, var(--empty)) !important;
   }
 
   .sheet,

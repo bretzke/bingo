@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { MAX_SHEETS } from "./bingo/constants";
-import { createStripePattern } from "./bingo/createStripePattern";
 import { generateSheets } from "./bingo/generator";
 import { printSheets } from "./bingo/printSheets";
 import { validateSheet } from "./bingo/validate";
@@ -31,10 +30,6 @@ export function App() {
   const [colors, setColors] = useState<CardColors>(DEFAULT_COLORS);
   const [paperImage, setPaperImage] = useState<string | null>(null);
   const [sheets, setSheets] = useState<Sheet[]>([]);
-  const stripePattern = useMemo(
-    () => createStripePattern(colors.stripe, colors.empty),
-    [colors.stripe, colors.empty],
-  );
 
   useEffect(() => {
     const styleId = "print-page-orientation";
@@ -109,7 +104,6 @@ export function App() {
               "--card-text": colors.text,
               "--card-stripe": colors.stripe,
               "--card-empty": colors.empty,
-              "--card-stripe-pattern": stripePattern ? `url("${stripePattern}")` : "none",
               "--paper-bg": colors.paper,
             } as CSSProperties
           }
